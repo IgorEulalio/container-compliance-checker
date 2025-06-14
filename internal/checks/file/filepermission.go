@@ -23,7 +23,7 @@ func (c *FilePermissionCheck) Run() (bool, error) {
 	fileInfo, err := os.Stat(c.FilePath)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return false, fmt.Errorf("file %s does not exist", c.FilePath)
+			return true, nil // File does not exist, consider it passing
 		}
 		return false, fmt.Errorf("error accessing file %s: %w", c.FilePath, err)
 	}

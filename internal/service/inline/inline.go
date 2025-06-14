@@ -39,7 +39,7 @@ func (i *Inline) Run() error {
 		}
 		results = append(results, report.NewReportResult(check.Name(), pass, false, ""))
 	}
-	report := report.NewReport(results)
-	report.WriteCSV("csv.csv")
+	reporter := report.NewReporter(results)
+	reporter.PrintConsole()
 	return nil
 }

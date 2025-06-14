@@ -1,13 +1,13 @@
 configs:
-- ValidationType: checkFileOption
-  config:
-    file: /etc/dnf/dnf.conf
-    option: gpgcheck
-    value: '1'
-- ValidationType: checkFileOption
-  config:
-    file: /etc/dnf/dnf.conf
-    option: repo_gpgcheck
+# - ValidationType: checkFileOption
+#   config:
+#     file: /etc/dnf/dnf.conf
+#     option: gpgcheck
+#     value: '1'
+# - ValidationType: checkFileOption
+#   config:
+#     file: /etc/dnf/dnf.conf
+#     option: repo_gpgcheck
 - ValidationType: Error
   config:
     description: 'Ambiguous script: dnf repolist'

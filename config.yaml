@@ -7,3 +7,8 @@ checks:
     config:
       file_path: /etc/security/opasswd`
       permissions: '600'
+  - type: FileOption
+    config:
+      file: /etc/dnf/dnf.conf
+      option: gpgcheck
+      value: 'True'

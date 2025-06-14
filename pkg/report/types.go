@@ -2,7 +2,7 @@ package report
 
 import "time"
 
-type Report struct {
+type Reporter struct {
 	Success   bool
 	Timestamp time.Time
 	Results   []*Result
@@ -15,7 +15,7 @@ type Result struct {
 	errorString string
 }
 
-func NewReport(results []*Result) *Report {
+func NewReporter(results []*Result) *Reporter {
 
 	success := true
 	for _, result := range results {
@@ -24,7 +24,7 @@ func NewReport(results []*Result) *Report {
 		}
 	}
 
-	return &Report{
+	return &Reporter{
 		Success:   success,
 		Timestamp: time.Now(),
 		Results:   results,

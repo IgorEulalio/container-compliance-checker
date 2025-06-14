@@ -6,7 +6,7 @@ import (
 )
 
 // WriteCSV writes the report results to a CSV file with columns: CheckName, Pass, HaveError, ErrorString
-func (r *Report) WriteCSV(filename string) error {
+func (r *Reporter) WriteCSV(filename string) error {
 	file, err := os.Create(filename)
 	if err != nil {
 		return err
