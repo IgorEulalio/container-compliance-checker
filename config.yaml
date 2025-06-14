@@ -1,0 +1,9 @@
+log_level: debug
+checks:
+  - type: PackageNotInstalled
+    config:
+      package: telnet-server
+  - type: FilePermission
+    config:
+      file_path: /etc/security/opasswd`
+      permissions: '600'

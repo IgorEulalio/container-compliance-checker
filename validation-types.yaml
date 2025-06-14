@@ -1,0 +1,297 @@
+configs:
+- ValidationType: checkFileOption
+  config:
+    file: /etc/dnf/dnf.conf
+    option: gpgcheck
+    value: '1'
+- ValidationType: checkFileOption
+  config:
+    file: /etc/dnf/dnf.conf
+    option: repo_gpgcheck
+- ValidationType: Error
+  config:
+    description: 'Ambiguous script: dnf repolist'
+- ValidationType: Error
+  config:
+    description: 'Ambiguous script: !/usr/bin/env bash'
+- ValidationType: checkFileRegexPresent
+  config:
+    files:
+    - /etc/chrony.conf
+    - /etc/chrony.d/
+    pattern: ^\s*(server|pool)\s+[^#]+
+- ValidationType: checkFileRegexAbsent
+  config:
+    file: /etc/sysconfig/chronyd
+    pattern: ^\s*OPTIONS=\"?\s*-u\s*root\b
+- ValidationType: checkPackageNotInstalled
+  config:
+    package: ypserv
+- ValidationType: checkPackageNotInstalled
+  config:
+    package: cups
+- ValidationType: checkPackageNotInstalled
+  config:
+    package: rpcbind
+- ValidationType: checkPackageNotInstalled
+  config:
+    package: net-snmp
+- ValidationType: checkPackageNotInstalled
+  config:
+    package: telnet-server
+- ValidationType: checkPackageNotInstalled
+  config:
+    package: tftp-server
+- ValidationType: checkPackageNotInstalled
+  config:
+    package: squid
+- ValidationType: checkPackageNotInstalled
+  config:
+    package: xinetd
+- ValidationType: checkPackageNotInstalled
+  config:
+    package: avahi
+- ValidationType: checkPortListening
+  config:
+    port: '25'
+- ValidationType: checkPackageNotInstalled
+  config:
+    package: dhcp-server
+- ValidationType: checkPackageNotInstalled
+  config:
+    package: bind
+- ValidationType: checkPackageNotInstalled
+  config:
+    package: dnsmasq
+- ValidationType: checkPackageNotInstalled
+  config:
+    package: samba
+- ValidationType: checkPackageNotInstalled
+  config:
+    package: vsftpd
+- ValidationType: checkPackageNotInstalled
+  config:
+    package: nfs-utils
+- ValidationType: checkPackageNotInstalled
+  config:
+    package: ftp
+- ValidationType: checkPackageNotInstalled
+  config:
+    package: ypbind
+- ValidationType: checkPackageNotInstalled
+  config:
+    package: telnet
+- ValidationType: checkPackageNotInstalled
+  config:
+    package: tftp
+- ValidationType: Error
+  config:
+    description: 'Ambiguous script: !/usr/bin/env bash'
+- ValidationType: checkUserPrimaryGroup
+  config:
+    user: root
+    gid: '0'
+- ValidationType: Error
+  config:
+    description: 'Ambiguous script: !/usr/bin/env bash'
+- ValidationType: Error
+  config:
+    description: 'Ambiguous script: ls -l /var/log/'
+- ValidationType: checkServiceState
+  config:
+    service: systemd-journal-remote.socket
+    state: enabled
+- ValidationType: checkServiceState
+  config:
+    service: systemd-journald.service
+    state: enabled
+- ValidationType: checkPortListening
+  config:
+    port: null
+- ValidationType: Error
+  config:
+    description: Define expected value for Storage in journald.conf
+- ValidationType: checkFileOption
+  config:
+    file: /etc/systemd/journald.conf
+    option: ForwardToSyslog
+    value: 'yes'
+- ValidationType: Error
+  config:
+    description: 'Ambiguous script: !/usr/bin/env bash'
+- ValidationType: checkPackageNotInstalled
+  config:
+    package: audit
+- ValidationType: checkBootParam
+  config:
+    param: audit
+    value: '1'
+- ValidationType: checkBootParam
+  config:
+    param: audit_backlog_limit
+    value: ''
+- ValidationType: checkServiceState
+  config:
+    service: auditd
+    state: enabled
+- ValidationType: checkFileOption
+  config:
+    file: /etc/audit/auditd.conf
+    option: max_log_file
+- ValidationType: checkFileOption
+  config:
+    file: /etc/audit/auditd.conf
+    option: max_log_file_action
+    value: keep_logs
+- ValidationType: checkAuditRule
+  config:
+    key: scope
+    rules:
+    - -w /etc/sudoers -p wa -k scope
+    - -w /etc/sudoers.d -p wa -k scope
+- ValidationType: checkAuditRule
+  config:
+    key: mounts
+    rules:
+    - -a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=unset -k mounts
+    - -a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=unset -k mounts
+- ValidationType: checkAuditRule
+  config:
+    key: logins
+    rules:
+    - -w /var/log/lastlog -p wa -k logins
+    - -w /var/run/faillock -p wa -k logins
+- ValidationType: checkAuditRule
+  config:
+    key: delete
+    rules:
+    - -a always,exit -F arch=b64 -S rename,unlink,unlinkat,renameat -F auid>=${UID_MIN}
+      -F auid!=unset -F key=delete
+    - -a always,exit -F arch=b32 -S rename,unlink,unlinkat,renameat -F auid>=${UID_MIN}
+      -F auid!=unset -F key=delete
+- ValidationType: checkAuditRule
+  config:
+    key: MAC-policy
+    rules:
+    - -w /etc/selinux -p wa -k MAC-policy
+    - -w /usr/share/selinux -p wa -k MAC-policy
+- ValidationType: checkAuditRule
+  config:
+    key: perm_chng
+    rules:
+    - -a always,exit -F path=/usr/bin/chcon -F perm=x -F auid>=${UID_MIN} -F auid!=unset
+      -k perm_chng
+- ValidationType: checkAuditRule
+  config:
+    key: usermod
+    rules:
+    - -a always,exit -F path=/usr/sbin/usermod -F perm=x -F auid>=${UID_MIN} -F auid!=unset
+      -k usermod
+- ValidationType: checkAuditRule
+  config:
+    key: access
+    rules:
+    - -a always,exit -F arch=b64 -S creat,open,openat,truncate,ftruncate -F exit=-EACCES
+      -F auid>=${UID_MIN} -F auid!=unset -k access
+    - -a always,exit -F arch=b64 -S creat,open,openat,truncate,ftruncate -F exit=-EPERM
+      -F auid>=${UID_MIN} -F auid!=unset -k access
+    - -a always,exit -F arch=b32 -S creat,open,openat,truncate,ftruncate -F exit=-EACCES
+      -F auid>=${UID_MIN} -F auid!=unset -k access
+    - -a always,exit -F arch=b32 -S creat,open,openat,truncate,ftruncate -F exit=-EPERM
+      -F auid>=${UID_MIN} -F auid!=unset -k access
+- ValidationType: checkAuditRule
+  config:
+    key: identity
+    rules:
+    - -w /etc/group -p wa -k identity
+    - -w /etc/passwd -p wa -k identity
+    - -w /etc/gshadow -p wa -k identity
+    - -w /etc/shadow -p wa -k identity
+    - -w /etc/security/opasswd -p wa -k identity
+- ValidationType: checkAuditRule
+  config:
+    key: perm_mod
+    rules:
+    - -a always,exit -F arch=b64 -S chmod,fchmod,fchmodat -F auid>=${UID_MIN} -F auid!=unset
+      -F key=perm_mod
+    - -a always,exit -F arch=b64 -S chown,fchown,lchown,fchownat -F auid>=${UID_MIN}
+      -F auid!=unset -F key=perm_mod
+    - -a always,exit -F arch=b32 -S chmod,fchmod,fchmodat -F auid>=${UID_MIN} -F auid!=unset
+      -F key=perm_mod
+    - -a always,exit -F arch=b32 -S lchown,fchown,chown,fchownat -F auid>=${UID_MIN}
+      -F auid!=unset -F key=perm_mod
+    - -a always,exit -F arch=b64 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr
+      -F auid>=${UID_MIN} -F auid!=unset -F key=perm_mod
+    - -a always,exit -F arch=b32 -S setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr
+      -F auid>=${UID_MIN} -F auid!=unset -F key=perm_mod
+- ValidationType: Error
+  config:
+    description: Audit rule requires specification
+- ValidationType: checkWorldWritable
+  config:
+    paths:
+    - /
+- ValidationType: Error
+  config:
+    description: rpm -Va check requires manual review or advanced parsing
+- ValidationType: checkPermission
+  config:
+    file: /etc/passwd-`
+    permission: '644'
+- ValidationType: checkPermission
+  config:
+    file: /etc/security/opasswd`
+    permission: '600'
+- ValidationType: checkPermission
+  config:
+    file: /etc/group`
+    permission: '644'
+- ValidationType: checkPermission
+  config:
+    file: /etc/group-`
+    permission: '644'
+- ValidationType: checkPermission
+  config:
+    file: /etc/shadow`
+    permission: '000'
+- ValidationType: checkPermission
+  config:
+    file: /etc/shadow-`
+    permission: '000'
+- ValidationType: checkPermission
+  config:
+    file: /etc/gshadow`
+    permission: '000'
+- ValidationType: checkPermission
+  config:
+    file: /etc/gshadow-`
+    permission: '000'
+- ValidationType: checkNoShadowedPasswords
+  config: {}
+- ValidationType: Error
+  config:
+    description: 'Ambiguous script: !/usr/bin/env bash'
+- ValidationType: checkNoEmptyPasswords
+  config: {}
+- ValidationType: Error
+  config:
+    description: 'Ambiguous script: !/bin/bash'
+- ValidationType: checkNoDuplicateIDs
+  config:
+    type: uid
+- ValidationType: checkNoDuplicateIDs
+  config:
+    type: gid
+- ValidationType: Error
+  config:
+    description: 'Ambiguous script: !/usr/bin/env bash'
+- ValidationType: Error
+  config:
+    description: 'Ambiguous script: !/usr/bin/env bash'
+- ValidationType: Error
+  config:
+    description: 'Ambiguous script: !/usr/bin/env bash'
+- ValidationType: checkUserPrimaryGroup
+  config:
+    user: root
+    gid: '0'
