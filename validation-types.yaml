@@ -14,12 +14,12 @@ configs:
 - ValidationType: Error
   config:
     description: 'Ambiguous script: !/usr/bin/env bash'
-- ValidationType: checkFileRegexPresent
-  config:
-    files:
-    - /etc/chrony.conf
-    - /etc/chrony.d/
-    pattern: ^\s*(server|pool)\s+[^#]+
+#- ValidationType: checkFileRegexPresent
+#  config:
+#    files:
+#    - /etc/chrony.conf
+#    - /etc/chrony.d/
+#    pattern: ^\s*(server|pool)\s+[^#]+
 - ValidationType: checkFileRegexAbsent
   config:
     file: /etc/sysconfig/chronyd

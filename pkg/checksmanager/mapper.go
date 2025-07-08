@@ -39,6 +39,14 @@ func MapConfigToChecks(config config.Config) ([]checks.Check, error) {
 				continue
 			}
 			checkList = append(checkList, check)
+		case FileRegexPresent:
+			check, err := file.NewFileRegexPresentCheck(c.Config)
+			if err != nil {
+				log.Error().Err(err).Str("check", c.Type).Msg("Error creating check.")
+				errList = append(errList, err)
+				continue
+			}
+			checkList = append(checkList, check)
 		default:
 			log.Warn().Msgf("Unknown check type, skipping: %s", c.Type)
 			continue

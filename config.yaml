@@ -12,3 +12,15 @@ checks:
       file: /etc/dnf/dnf.conf
       option: gpgcheck
       value: 'True'
+  - type: FileRegexPresent # TODO : need to become checkFileRegexAbsent too, trough options
+    config:
+      files:
+        - /etc/chrony.conf
+        - /etc/chrony.d/
+      pattern: ^\s*(server|pool)\s+[^#]+
+#  - type: PortListening
+#    config:
+#      port: '25'
+#type: UserPrimaryGroup
+#type: SystemdService
+#type: RunCustomScript
